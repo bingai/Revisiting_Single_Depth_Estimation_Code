@@ -62,9 +62,10 @@ def main():
     while cap.isOpened():
         
         ret, frame = cap.read()
-        # print('------- ret: ', ret)
-        # print('-------- image before transformation:', frame.shape)
+        print('------- ret: ', ret)
+        print('-------- image before transformation:', frame.shape)
         if ret:
+            # cv2.imshow("input", frame)
             images = loaddata_video.readVideo(frame)
             # print('--------transformed image:', images)
             # print('+++++ image after transformation:', images.shape)
@@ -80,16 +81,22 @@ def main():
             output = out.view(out.size(2), out.size(3)).data.cpu().numpy()
             matplotlib.image.imsave('./data/demo/output_camera.png', output)  # store value [0,1]
 
-            # print('------ output: ', output) 
             print('------ output: ', output.shape)  
             print('------ max distance is ={0}, min distance is = {1} '.format(np.amax(output), np.amin(output)))
             output = cv2.imread('./data/demo/output_camera.png')
-            # print('------ output: ', output) 
             print('------ output: ', output.shape)  
             print('------ max distance is ={0}, min distance is = {1} '.format(np.amax(output), np.amin(output)))
+            # cv2.imshow("depth", output)
 
-            cv2.imshow("frame", output)
-            # cv2.imshow("frame", out.view(out.size(1), out.size(2)).data.cpu().numpy())
+            # frame = cv2.resize(frame, (640, 360), interpolation=cv2.INTER_LINEAR)
+            frame = cv2.resize(frame, (800, 450), interpolation=cv2.INTER_LINEAR)
+
+            output_resize = cv2.resize(output, (frame.shape[1], frame.shape[0]), interpolation=cv2.INTER_LINEAR) # frame is the original image
+
+            image_numpy_horizontal = np.concatenate((frame, output_resize), axis=1)
+            
+            cv2.imshow("depth estimation", image_numpy_horizontal)
+
             key = cv2.waitKey(1)
             if key & 0xFF == ord('x'):
                 break
