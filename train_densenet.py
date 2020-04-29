@@ -13,7 +13,7 @@ import sobel
 from models import modules, net, resnet, densenet, senet
 
 parser = argparse.ArgumentParser(description='PyTorch DenseNet Training')
-parser.add_argument('--epochs', default=20, type=int,
+parser.add_argument('--epochs', default=1, type=int,
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int,
                     help='manual epoch number (useful on restarts)')

@@ -12,11 +12,32 @@ import sobel
 
 
 def main():
-    model = define_model(is_resnet=False, is_densenet=False, is_senet=True)
-    model = torch.nn.DataParallel(model).cuda()
-    model.load_state_dict(torch.load('./pretrained_model/model_senet'))
 
-    # test_loader = loaddata.getTestingData(4)
+    # model = define_model(is_resnet=False, is_densenet=False, is_senet=True)
+    # model = torch.nn.DataParallel(model).cuda()
+    # model.load_state_dict(torch.load('./pretrained_model/model_senet'))
+    # choose the backbone architecture:
+    
+    is_resnet = True
+    is_densenet = False
+    is_senet = False
+    model = define_model(is_resnet, is_densenet, is_senet)
+    model = torch.nn.DataParallel(model).cuda()
+
+    # load the pretrained model:
+    if is_resnet:
+        checkpoint = torch.load('./pretrained_model/resnet50_checkpoint.pth.tar')
+        # model.load_state_dict(torch.load('./pretrained_model/model_resnet'))
+    if is_densenet:
+        checkpoint = torch.load('./pretrained_model/densenet_checkpoint.pth.tar')
+        # model.load_state_dict(torch.load('./pretrained_model/model_densenet'))
+    if is_senet:
+        checkpoint = torch.load('./pretrained_model/senet_checkpoint.pth.tar')
+        # model.load_state_dict(torch.load('./pretrained_model/model_senet'))
+    
+    model.load_state_dict(checkpoint['state_dict'])
+
+    # test_loader = loaddata.getTestingData(2)
     test_loader = loaddata.getTestingData(1)
     # print('-----------', test_loader)
     test(test_loader, model, 0.25)
@@ -41,15 +62,21 @@ def test(test_loader, model, thre):
 
         depth = depth.cuda(async=True)
         image = image.cuda()
-
-        image = torch.autograd.Variable(image, volatile=True)
+        # print('------- depth: ', depth.size())
+        # print('------- image: ', image.size())
+        image = torch.autograd.Variable(image, volatile=True)   # volatile=True tells PyTorch to not bother keeping track of the computation graph. 
         depth = torch.autograd.Variable(depth, volatile=True)
  
         output = model(image)
+        # print('----++++ output: ', output.size())
+
         output = torch.nn.functional.upsample(output, size=[depth.size(2),depth.size(3)], mode='bilinear')
+        # print('++++++++ output: ', output.size())
 
         depth_edge = edge_detection(depth)
+        # print('++++++++ output: ', depth_edge.size())
         output_edge = edge_detection(output)
+        # print('++++++++ output: ', output_edge.size())
 
         batchSize = depth.size(0)
         totalNumber = totalNumber + batchSize
@@ -73,9 +100,9 @@ def test(test_loader, model, thre):
         Pe += P
         Re += R
         Fe += F
-        # print('------------', i)
+        print('------------', i)
 
-    Av = Ae / totalNumber
+    # Av = Ae / totalNumber
     Pv = Pe / totalNumber
     Rv = Re / totalNumber
     Fv = Fe / totalNumber
