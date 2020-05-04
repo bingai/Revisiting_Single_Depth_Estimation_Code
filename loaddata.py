@@ -12,11 +12,21 @@ class depthDataset(Dataset):
 
     def __init__(self, csv_file, transform=None):
         self.frame = pd.read_csv(csv_file, header=None)
+        # print("++++++ frame = ", self.frame)
+        # print("self.frame.ix[idx, 0]", self.frame.ix[2, 0])
+        # print("self.frame.ix[idx, 1]", self.frame.ix[2, 1])
+
+        # image_name = self.frame.ix[2, 0]
+        # image = Image.open(image_name)
+        # print("-----", image)
+
         self.transform = transform
 
     def __getitem__(self, idx):
         image_name = self.frame.ix[idx, 0]
         depth_name = self.frame.ix[idx, 1]
+
+        # print("----- idx = {0}, image_name: {1}".format(idx, image_name))
 
         image = Image.open(image_name)
         depth = Image.open(depth_name)

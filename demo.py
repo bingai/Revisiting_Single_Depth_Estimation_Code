@@ -4,7 +4,8 @@ import torch.nn.parallel
 
 from models import modules, net, resnet, densenet, senet
 import numpy as np
-import loaddata_demo as loaddata
+# import loaddata_demo as loaddata
+import loaddata_demo
 import pdb
 
 import matplotlib.image
@@ -52,7 +53,9 @@ def main():
 
     model.eval()
 
-    nyu2_loader = loaddata.readNyu2('./data/demo/img_nyu2.png')
+    # nyu2_loader = loaddata.readNyu2('./data/demo/img_nyu2.png')
+    nyu2_loader = loaddata_demo.readNyu2('./data/demo/images/')
+
     # print('-----++++transformed image:', type(nyu2_loader))
     test(nyu2_loader, model)
 
@@ -75,7 +78,7 @@ def test(nyu2_loader, model):
         print('out0 = {0},  out1 = {1},  out2 = {2},  out3 = {3}'.format(out.size(0), out.size(1), out.size(2), out.size(3)))
         print(out.view(out.size(2),out.size(3)).data.cpu().numpy())
         matplotlib.image.imsave('./data/demo/out.png', out.view(out.size(2),out.size(3)).data.cpu().numpy())
-        matplotlib.image.imshow('./data/demo/out.png', out.view(out.size(2),out.size(3)).data.cpu().numpy())
+        # matplotlib.image.imshow('./data/demo/out.png', out.view(out.size(2),out.size(3)).data.cpu().numpy())
         
 if __name__ == '__main__':
     main()
