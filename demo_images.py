@@ -32,8 +32,8 @@ def define_model(is_resnet, is_densenet, is_senet):
 
 def main():
     # choose the backbone architecture:
-    is_resnet = False
-    is_densenet = True
+    is_resnet = True
+    is_densenet = False
     is_senet = False
     model = define_model(is_resnet, is_densenet, is_senet)
     model = torch.nn.DataParallel(model).cuda()
@@ -62,7 +62,7 @@ def main():
         print('----------- i', i)  
         print('---Input info:', image.size(), image_name)
         img_name = image_name[0]
-        print('---Input mane:', img_name)
+        print('---Input name:', img_name)
 
 
         # # image = torch.autograd.Variable(image, volatile=True).cuda()  #bai2 old way
@@ -73,7 +73,7 @@ def main():
             out = model(image)
         print('---Output info:', out.size())
 
-        # out = F.upsample(out, size=(out.size(2)*2, out.size(3)*2), mode='bilinear')
+        out = F.upsample(out, size=(out.size(2)*2, out.size(3)*2), mode='bilinear')
         output = out.view(out.size(2),out.size(3)).data.cpu().numpy()
         
         # outputPath = os.path.join(imagesPath, img_name)

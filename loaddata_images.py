@@ -67,7 +67,6 @@ def main():
     #     print(image_name)
     #     image = torch.Tensor(image).cuda() #bai2 new way
    
-
 # if __name__ == '__main__':
 #     main()
 

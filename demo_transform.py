@@ -10,7 +10,6 @@ except ImportError:
 
 
 
-
 def _is_pil_image(img):
     if accimage is not None:
         return isinstance(img, (Image.Image, accimage.Image))
