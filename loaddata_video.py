@@ -44,7 +44,6 @@ import cv2
 #     # print('load data successful !!!!!!!')
 #     return image
 
-
 class videoDataset(object):
     def __init__(self, filename, transform=None):
         self.frame = transforms.ToPILImage()(filename)  #bai2 must convert into PILImage()
