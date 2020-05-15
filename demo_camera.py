@@ -11,6 +11,7 @@ import pdb
 import matplotlib.image
 import matplotlib.pyplot as plt
 plt.set_cmap("jet")
+import time
 
 
 def define_model(is_resnet, is_densenet, is_senet):
@@ -61,6 +62,7 @@ def main():
     
     assert cap.isOpened(), 'Cannot capture source'
     
+    times = []
     while cap.isOpened():
         
         ret, frame = cap.read()
@@ -68,7 +70,8 @@ def main():
         # print('-------- image before transformation:', frame.shape)
         if ret:
             print('-------- image before transformation:', frame.shape)
-
+            
+            t1 = time.time()
             images = loaddata_camera.readVideo(frame)
             # print('--------transformed image:', images)
             # print('+++++ image after transformation:', images.shape())
@@ -78,6 +81,12 @@ def main():
 
             with torch.no_grad(): 
                 out = model(image)      # dtype = np.uint16
+            t2 = time.time()
+            times.append(t2-t1)
+            times = times[-20:]
+            # inference_time = sum(times)/len(times)*1000
+            inference_time = (t2-t1)*1000
+
             print('1 +++++++++++++++++ Tensor output:')
             print('     Tensor Output: {};      max = {},   min = {} '.format(out.shape, torch.max(out), torch.min(out)))
             
@@ -89,6 +98,7 @@ def main():
             gray = gray*0.229 + 0.485   # transform the depth output back into original value through imageNet mean & std
             print('\n**********************************************************************************************')
             print(' True Value of Depth Map: {};    max = {},   min={}'.format(np.shape(gray), np.amax(gray), np.amin(gray)))
+            print(' Inference time = {:.2f}ms'.format(inference_time))
             print('**********************************************************************************************\n')
             
             gray_scaled01 = (gray - np.amin(gray)) / (np.amax(gray) - np.amin(gray))    # scale output into [0, 1]
