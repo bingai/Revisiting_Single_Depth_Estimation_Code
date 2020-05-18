@@ -59,7 +59,8 @@ def main():
     # cap = cv2.VideoCapture(videofile)
 
     cap = cv2.VideoCapture(0)
-    
+    cap.set(cv2.CAP_PROP_POS_FRAMES, 2000)
+
     assert cap.isOpened(), 'Cannot capture source'
     
     times = []
