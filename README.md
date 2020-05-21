@@ -27,6 +27,9 @@ Download the data:
 + ### Train<br>
   python train.py<br>
 
++ ### Run Autohich Gray images<br>
+  python demo_autohich_images_gray.py
+
 Citation
 -
 If you use the code or the pre-processed data, please cite:
