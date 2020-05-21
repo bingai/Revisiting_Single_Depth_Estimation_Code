@@ -30,6 +30,9 @@ Download the data:
 + ### Run Autohich Gray images<br>
   python demo_autohich_images_gray.py
 
++ ### Run Autohich RGB images<br>
+  python demo_autohich_images_rgb.py
+
 Citation
 -
 If you use the code or the pre-processed data, please cite:
