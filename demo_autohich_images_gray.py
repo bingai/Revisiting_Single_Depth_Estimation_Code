@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 from models import modules, net, resnet, densenet, senet
 import numpy as np
-import loaddata_autohich_Gray
+import loaddata_autohich_gray
 import pdb
 
 import matplotlib.image
@@ -54,7 +54,7 @@ def main():
     model.eval()
 
     imagesPath = './data/Autohich/gray_image/'
-    image_loader = loaddata_autohich_RGB.readImage(imagesPath)
+    image_loader = loaddata_autohich_gray.readImage(imagesPath)
     # print('-----++++transformed image:', type(image_loader))
     # test(image_loader, model)
 
